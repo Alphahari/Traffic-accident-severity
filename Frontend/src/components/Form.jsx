@@ -1,18 +1,86 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import Select from 'react-select';
 
 const Form = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm();
+  const [predictionResult, setPredictionResult] = useState(null);
+  const onSubmit = async (data) => {
+    const modelsToUse = selectedModels.map(model => ({
+      key: model.label,
+      value: model.value,
+    }));
+    const userData = [
+      data["1st_Road_Class"],
+      data["Day_of_Week"],
+      data["Junction_Control"],
+      data["Junction_Detail"],
+      data["Light_Conditions"],
+      data["Local_Authority"],
+      data["Pedestrian_Crossing_Human_Control"],
+      data["Pedestrian_Crossing_Physical_Facilities"],
+      data["Road_Surface_Conditions"],
+      data["Road_Type"],
+      data["Special_Conditions_at_Site"],
+      data["Speed_limit"],
+      data["Urban_or_Rural_Area"],
+      data["Weather_Conditions"]
+    ];
+    const formattedData = {
+      modelsToUse: modelsToUse,
+      userData: userData,
+    };
 
-  const onSubmit = (data) => {
-    console.log(data);
-    reset();
+    console.log("Formatted Data: ", formattedData);
+    try {
+      const response = await fetch('http://127.0.0.1:5000/predict', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formattedData),
+      });
+
+      if (response.ok) {
+        const responseData = await response.json();
+        console.log("Backend Response: ", responseData);
+        let resultString = '';
+        for (const key in responseData) {
+          const value = responseData[key];
+          console.log(`key: ${key}, value: ${value}`);
+          resultString += `${key}: ${value}\n`;
+        }
+        setPredictionResult(resultString);
+        // reset();
+      } else {
+        console.error('Error submitting data:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+  const [selectedModels, setSelectedModels] = useState([]);
+  const options = [
+    { label: "Decision Tree Classifier", value: 'dt_classifier' },
+    { label: "Gradient Boosting Classifier", value: 'gb_classifier' },
+    { label: "Random Forest Classifier", value: 'rf_classifier' },
+    { label: "Logistic Regression", value: 'lg_classifier' },
+    { label: "XGBoost Classifier", value: 'xgb_classifier' },
+    { label: "KNN Classifier", value: 'knn_classifier' },
+  ];
+
+  const onSelect = (selectedOptions) => {
+    setSelectedModels(selectedOptions);
   };
 
+  const onRemove = (selectedOptions) => {
+    setSelectedModels(selectedOptions);
+  };
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)} className='max-w-4xl mx-auto p-6 bg-slate-200 rounded-lg shadow-md'>
@@ -354,15 +422,43 @@ const Form = () => {
               <option value="1">Rural</option>
             </select>
           </div>
-        </div>
 
-        <button
-          type="submit"
-          className='mt-4 bg-blue-600 text-white rounded-lg px-4 py-2 hover:bg-blue-700 transition duration-200'
-        >
-          Submit
-        </button>
+          {/* Weather */}
+          <div>
+            <label className="block mb-2 text-sm font-medium text-gray-900">Weather Condition</label>
+            <select {...register("Weather_Conditions", { required: true })} className="block w-full border rounded-lg p-2" defaultValue="">
+              <option disabled value="">Select Weather Condition</option>
+              <option value="0">Fine + High Winds</option>
+              <option value="1">Fine No High Winds</option>
+              <option value="2">Fog or Mist</option>
+              <option value="4">Raining + High Winds</option>
+              <option value="5">Raining No High Winds</option>
+              <option value="6">Snowing + High Winds</option>
+              <option value="7">Snowing No High Winds</option>
+              <option value="3">Other</option>
+            </select>
+          </div>
+
+          {/* Model */}
+          <div className='w-4/5 lg:w-full'>
+            <label className="block mb-2 text-sm font-medium text-gray-900 ">Model</label>
+            <Select
+              options={options}
+              isMulti
+              value={selectedModels}
+              onChange={onSelect}
+            />
+          </div>
+        </div>
+        <button type="submit" className='mt-4 bg-blue-600 text-white rounded-lg px-4 py-2 hover:bg-blue-700 transition duration-200'>Submit</button>
       </form>
+      {/* Displaying the Prediction Result */}
+      {predictionResult && (
+        <div className="flex flex-col justify-center items-center mt-6 p-4 bg-gray-100 rounded-lg">
+          <h3 className="font-semibold text-xl">Prediction Results:</h3>
+          <pre className="whitespace-pre-wrap">{predictionResult}</pre>
+        </div>
+      )}
     </>
   );
 };
