@@ -23,7 +23,7 @@ def predict_default():
             for mod in modelsToUse:
                 fileName = mod['value']
                 modelName = mod['key']
-                with open(f'Backend/models/{fileName}.pkl', 'rb') as file:
+                with open(f'./models/{fileName}.pkl', 'rb') as file:
                     model = pickle.load(file)
                 file.close()
                 newDataFrame = pd.DataFrame(data=[userData], columns=['1st_Road_Class', 'Day_of_Week', 'Junction_Control', 'Junction_Detail', 'Light_Conditions', 'Local_Authority_(District)', 'Pedestrian_Crossing-Human_Control', 'Pedestrian_Crossing-Physical_Facilities', 'Road_Surface_Conditions', 'Road_Type', 'Special_Conditions_at_Site', 'Speed_limit', 'Urban_or_Rural_Area', 'Weather_Conditions'])
