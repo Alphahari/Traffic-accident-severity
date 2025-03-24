@@ -27,7 +27,7 @@ def predict_default():
                     model = pickle.load(file)
                 file.close()
                 newDataFrame = pd.DataFrame(data=[userData], columns=['1st_Road_Class', 'Day_of_Week', 'Junction_Control', 'Junction_Detail', 'Light_Conditions', 'Local_Authority_(District)', 'Pedestrian_Crossing-Human_Control', 'Pedestrian_Crossing-Physical_Facilities', 'Road_Surface_Conditions', 'Road_Type', 'Special_Conditions_at_Site', 'Speed_limit', 'Urban_or_Rural_Area', 'Weather_Conditions'])
-                scaler = pickle.load(open('Backend/scaler.pkl', 'rb'))
+                scaler = pickle.load(open('./scaler.pkl', 'rb'))
                 newDataArray = scaler.transform(newDataFrame)
                 prediction = model.predict(newDataArray)
                 prediction_label = prediction[0]
