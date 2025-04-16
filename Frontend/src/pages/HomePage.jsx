@@ -1,13 +1,9 @@
-import Navbar from '../components/Navbar';
 import Form from '../components/Form';
-import Footer from '../components/Footer';
 
 const HomePage = () => {
   return (
     <>
-      <Navbar />
-      <hr />
-      <main className="flex flex-col flex-1 mb-10">
+      <main className="flex flex-col flex-1 mb-10 bg-white bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))]">
         <div className="grid grid-cols-1 md:grid-cols-2 items-center">
           <div className="flex flex-col md:px-32 mt-12 px-12">
             <p className="font-bold">
@@ -22,7 +18,7 @@ const HomePage = () => {
               explore and analyze accident data to uncover patterns and improve safety measures on the roads.
             </p>
           </div>
-          <img className="mx-auto" src="logo.png" alt="Logo" />
+          <img className="mx-auto w-72 rounded-lg" src="logo.png" alt="Logo" />
         </div>
 
         <div className="min-h-dvh md:mt-8 px-12 md:px-32">
@@ -38,7 +34,6 @@ const HomePage = () => {
           </div>
         </div>
       </main>
-      <Footer />
     </>
   );
 };

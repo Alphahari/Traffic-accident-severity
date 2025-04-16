@@ -19,6 +19,13 @@ def predict_default():
         data = request.get_json()
         modelsToUse = data['modelsToUse']
         userData = data['userData']
+
+        label_map = {
+                    2: "Slight",
+                    1: "Serious",
+                    0: "Fatal"
+                }
+
         try:
             for mod in modelsToUse:
                 fileName = mod['value']
@@ -29,8 +36,11 @@ def predict_default():
                 newDataFrame = pd.DataFrame(data=[userData], columns=['1st_Road_Class', 'Day_of_Week', 'Junction_Control', 'Junction_Detail', 'Light_Conditions', 'Local_Authority_(District)', 'Pedestrian_Crossing-Human_Control', 'Pedestrian_Crossing-Physical_Facilities', 'Road_Surface_Conditions', 'Road_Type', 'Special_Conditions_at_Site', 'Speed_limit', 'Urban_or_Rural_Area', 'Weather_Conditions'])
                 scaler = pickle.load(open('./scaler.pkl', 'rb'))
                 newDataArray = scaler.transform(newDataFrame)
+            
                 prediction = model.predict(newDataArray)
                 prediction_label = prediction[0]
+                if 'xgb' in fileName:
+                    prediction_label = label_map.get(int(prediction_label), "Unknown") 
                 result.update({modelName: prediction_label})
             return jsonify(result)
         except Exception as error:
@@ -39,4 +49,4 @@ def predict_default():
                 "error": str(error)
             })
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    app.run(port=5000, debug=True)

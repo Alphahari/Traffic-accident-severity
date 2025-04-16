@@ -55,6 +55,7 @@ const Form = () => {
       // }
       
       const response = await fetch(`${import.meta.env.VITE_base_url}/predict`, {
+      // const response = await fetch(`http://127.0.0.1:5000/predict`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -88,6 +89,7 @@ const Form = () => {
     { label: "Logistic Regression", value: 'lg_classifier' },
     { label: "XGBoost Classifier", value: 'xgb_classifier' },
     { label: "KNN Classifier", value: 'knn_classifier' },
+    { label: "voting Classifier(Hard)", value: 'voting_classifier' },
   ];
 
   const onSelect = (selectedOptions) => {
@@ -106,7 +108,7 @@ const Form = () => {
           {/* 1st Road Class */}
           <div>
             <label className="block mb-2 text-sm font-medium text-gray-900">1st Road Class</label>
-            <select {...register("1st_Road_Class", { required: false })} className='block w-full border rounded-lg p-2' defaultValue="">
+            <select {...register("1st_Road_Class", { required: true })} className='block w-full border rounded-lg p-2' defaultValue="">
               <option disabled value="">Select Road_Class</option>
               <option value="0">A</option>
               <option value="2">B</option>
@@ -119,7 +121,7 @@ const Form = () => {
           {/* Day of Week */}
           <div>
             <label className="block mb-2 text-sm font-medium text-gray-900">Day of Week</label>
-            <select {...register("Day_of_Week", { required: false })} className='block w-full border rounded-lg p-2' defaultValue="">
+            <select {...register("Day_of_Week", { required: true })} className='block w-full border rounded-lg p-2' defaultValue="">
               <option disabled value="">Select Day of Week</option>
               <option value="1">Monday</option>
               <option value="5">Tuesday</option>
@@ -134,7 +136,7 @@ const Form = () => {
           {/* Junction Control */}
           <div>
             <label className="block mb-2 text-sm font-medium text-gray-900">Junction Control</label>
-            <select {...register("Junction_Control", { required: false })} className='block w-full border rounded-lg p-2' defaultValue="">
+            <select {...register("Junction_Control", { required: true })} className='block w-full border rounded-lg p-2' defaultValue="">
               <option disabled value="">Select Junction Control</option>
               <option value="0">Authorised person</option>
               <option value="1">Auto traffic signal</option>
@@ -147,7 +149,7 @@ const Form = () => {
           {/* Junction Detail */}
           <div>
             <label className="block mb-2 text-sm font-medium text-gray-900">Junction Detail</label>
-            <select {...register("Junction_Detail", { required: false })} className='block w-full border rounded-lg p-2' defaultValue="">
+            <select {...register("Junction_Detail", { required: true })} className='block w-full border rounded-lg p-2' defaultValue="">
               <option disabled value="">Select Junction Detail</option>
               <option value="0">Crossroads</option>
               <option value="2">Mini-roundabout</option>
@@ -164,7 +166,7 @@ const Form = () => {
           {/* Light Conditions */}
           <div>
             <label className="block mb-2 text-sm font-medium text-gray-900">Light Conditions</label>
-            <select {...register("Light_Conditions", { required: false })} className='block w-full border rounded-lg p-2' defaultValue="">
+            <select {...register("Light_Conditions", { required: true })} className='block w-full border rounded-lg p-2' defaultValue="">
               <option disabled value="">Select Light_Conditions</option>
               <option value="0">Darkness - lighting unknown</option>
               <option value="1">Darkness - lights lit</option>
@@ -177,7 +179,7 @@ const Form = () => {
           {/* Local Authority */}
           <div>
             <label className="block mb-2 text-sm font-medium text-gray-900">Local Authority (District)</label>
-            <select {...register("Local_Authority", { required: false })} className='block w-full border rounded-lg p-2' defaultValue="">
+            <select {...register("Local_Authority", { required: true })} className='block w-full border rounded-lg p-2' defaultValue="">
               <option disabled value="">Select Local Authority</option>
               <option value="0">Allerdale</option>
               <option value="1">Alnwick</option>
@@ -354,7 +356,7 @@ const Form = () => {
           {/* Pedestrian Crossing - Human Control */}
           <div>
             <label className="block mb-2 text-sm font-medium text-gray-900">Pedestrian Crossing - Human Control</label>
-            <select {...register("Pedestrian_Crossing_Human_Control", { required: false })} className='block w-full border rounded-lg p-2' defaultValue="">
+            <select {...register("Pedestrian_Crossing_Human_Control", { required: true })} className='block w-full border rounded-lg p-2' defaultValue="">
               <option disabled value="">Pedestrian Crossing Human Control</option>
               <option value="0">No control</option>
               <option value="1">Controlled</option>
@@ -364,7 +366,7 @@ const Form = () => {
           {/* Pedestrian Crossing - Physical Facilities */}
           <div>
             <label className="block mb-2 text-sm font-medium text-gray-900">Pedestrian Crossing - Physical Facilities</label>
-            <select {...register("Pedestrian_Crossing_Physical_Facilities", { required: false })} className='block w-full border rounded-lg p-2' defaultValue="">
+            <select {...register("Pedestrian_Crossing_Physical_Facilities", { required: true })} className='block w-full border rounded-lg p-2' defaultValue="">
               <option disabled value="">Select Pedestrian Crossing Facilities</option>
               <option value="0">None</option>
               <option value="1">Zebra</option>
